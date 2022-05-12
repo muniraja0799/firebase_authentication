@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:firebase_authentication/app/modules/forgot_password/bindings/forgot_password_binding.dart';
+import 'package:firebase_authentication/app/modules/forgot_password/views/forgot_password_view.dart';
 import 'package:firebase_authentication/app/modules/home/bindings/home_binding.dart';
 import 'package:firebase_authentication/app/modules/home/views/home_view.dart';
 import 'package:firebase_authentication/app/modules/login/bindings/login_binding.dart';
@@ -39,6 +41,11 @@ class AppPages {
       name: _Paths.WELCOME,
       page: () => WelcomeView(),
       binding: WelcomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGOT_PASSWORD,
+      page: () => ForgotPasswordView(),
+      binding: ForgotPasswordBinding(),
     ),
   ];
 }

@@ -35,7 +35,7 @@ class HomeView extends GetView<HomeController> {
                   CustomButton(
                     onPressed: () {
                       _auth.signOut();
-                      Get.toNamed('/welcome');
+                      Get.offNamed('/welcome');
                     },
                     text: 'Logout',
                   ),

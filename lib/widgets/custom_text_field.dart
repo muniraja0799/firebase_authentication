@@ -13,13 +13,10 @@ class CustomFormTextField extends StatelessWidget {
     this.onClick,
     this.prefixText,
     required this.onChanged,
-    this.validate,
-    required this.textEditingController,
   }) : super(key: key);
 
   final String hint;
   final void Function(String)? onChanged;
-  final String? Function(String?)? validate;
   final String? prefixText;
   final bool obsecureText;
   final bool enableSuggestions;
@@ -27,14 +24,11 @@ class CustomFormTextField extends StatelessWidget {
   final Widget? suffixicon;
   final IconData? prefixicon;
   final VoidCallback? onClick;
-  final TextEditingController textEditingController;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: textEditingController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: validate,
       onChanged: onChanged,
       obscureText: obsecureText,
       enableSuggestions: enableSuggestions,

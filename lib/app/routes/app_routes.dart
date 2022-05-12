@@ -12,6 +12,7 @@ abstract class Routes {
   static const WELCOME = _Paths.WELCOME;
   static const PHONENUMBER = _Paths.PHONENUMBER;
   static const MAIN = _Paths.MAIN;
+  static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const WELCOME = '/welcome';
   static const PHONENUMBER = '/phonenumber';
   static const MAIN = '/main';
+  static const FORGOT_PASSWORD = '/forgot-password';
 }

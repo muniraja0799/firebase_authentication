@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/constants.dart';
 import 'package:firebase_authentication/widgets/custom_button.dart';
 import 'package:firebase_authentication/widgets/custom_text_field.dart';
@@ -10,9 +9,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
-  final _auth = FirebaseAuth.instance;
-  final pwdController = TextEditingController();
-  final emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,13 +72,6 @@ class RegisterView extends GetView<RegisterController> {
                         SizedBox(height: 24),
                         SizedBox(height: 16),
                         CustomFormTextField(
-                          validate: (value) {
-                            if (!GetUtils.isEmail(value!)) {
-                              return 'Email is not valid';
-                            } else {
-                              return '';
-                            }
-                          },
                           prefixicon: Icons.email,
                           hint: 'Email',
                           obsecureText: false,
@@ -90,9 +79,7 @@ class RegisterView extends GetView<RegisterController> {
                           autocorrect: false,
                           onChanged: (value) {
                             controller.emailAddress.value = value;
-                            print(controller.emailAddress.value);
                           },
-                          textEditingController: emailController,
                         ),
                         SizedBox(
                           height: 16,
@@ -123,17 +110,17 @@ class RegisterView extends GetView<RegisterController> {
                             },
                             onChanged: (value) {
                               controller.password.value = value;
-                              print(controller.password.value);
+                              (controller.password.value);
                             },
-                            textEditingController: pwdController,
                           ),
                         ),
                         SizedBox(
                           height: 40.0,
-                          child: Text(''),
                         ),
                         CustomButton(
-                          onPressed: signUp,
+                          onPressed: () {
+                            controller.signUp();
+                          },
                           text: 'Register',
                         ),
                         SizedBox(height: 25),
@@ -170,22 +157,5 @@ class RegisterView extends GetView<RegisterController> {
         ),
       ),
     );
-  }
-
-  Future signUp() async {
-    GetUtils.isEmail(emailController.text)
-        ? print('Email is valid')
-        : print('Email is invalid!!!');
-    controller.showSpinner.value = !controller.showSpinner.value;
-    try {
-      await _auth.createUserWithEmailAndPassword(
-          email: controller.emailAddress.value.trim(),
-          password: controller.password.value.trim());
-      Get.toNamed('/home');
-      controller.showSpinner.value = !controller.showSpinner.value;
-    } catch (e) {
-      controller.showSpinner.value = !controller.showSpinner.value;
-      print(e);
-    }
   }
 }

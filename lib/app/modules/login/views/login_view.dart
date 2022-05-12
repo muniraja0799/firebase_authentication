@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/constants.dart';
 import 'package:firebase_authentication/widgets/custom_button.dart';
 import 'package:firebase_authentication/widgets/custom_text_field.dart';
@@ -11,9 +10,6 @@ import '../controllers/login_controller.dart';
 
 // ignore: must_be_immutable
 class LoginView extends GetView<LoginController> {
-  final _auth = FirebaseAuth.instance;
-  final pwdController = TextEditingController();
-  final emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,30 +70,18 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ),
                         SizedBox(height: 24),
-                        SizedBox(height: 16),
                         CustomFormTextField(
                           onChanged: (value) {
                             controller.emailAddress.value = value;
-                            print(controller.emailAddress.value);
                           },
                           prefixicon: Icons.email,
                           hint: 'Email',
                           obsecureText: false,
                           enableSuggestions: true,
                           autocorrect: false,
-                          textEditingController: emailController,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 15.0,
-                            width: double.infinity,
-                            child: Text(
-                              controller.validEmail.value,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(color: Colors.yellow),
-                            ),
-                          ),
+                        SizedBox(
+                          height: 15.0,
                         ),
                         Obx(
                           () => CustomFormTextField(
@@ -124,28 +108,19 @@ class LoginView extends GetView<LoginController> {
                             },
                             onChanged: (value) {
                               controller.password.value = value;
-                              print(controller.password.value);
                             },
-                            textEditingController: pwdController,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 30.0,
-                            width: double.infinity,
-                            child: Text(
-                              controller.validCredentials.value,
-                              style: TextStyle(color: Colors.yellow),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
+                        SizedBox(
+                          height: 15.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             GestureDetector(
-                              onTap: () async {},
+                              onTap: () async {
+                                Get.toNamed('/forgot-password');
+                              },
                               child: Text(
                                 'Forgot Password ?',
                                 style: TextStyle(
@@ -156,7 +131,9 @@ class LoginView extends GetView<LoginController> {
                         ),
                         SizedBox(height: 20.0),
                         CustomButton(
-                          onPressed: signIn,
+                          onPressed: () {
+                            controller.signIn();
+                          },
                           text: 'Login',
                         ),
                       ],
@@ -169,28 +146,5 @@ class LoginView extends GetView<LoginController> {
         ),
       ),
     );
-  }
-
-  Future signIn() async {
-    GetUtils.isEmail(emailController.text)
-        ? controller.validEmail.value = ''
-        : controller.validEmail.value = 'Email is invalid!!!';
-
-    controller.showSpinner.value = !controller.showSpinner.value;
-    try {
-      await _auth.signInWithEmailAndPassword(
-          email: controller.emailAddress.value,
-          password: controller.password.value);
-      Get.toNamed('/home');
-      controller.showSpinner.value = !controller.showSpinner.value;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        controller.validCredentials.value = 'Invalid details';
-        print('Wrong password provided for that user.');
-      }
-      controller.showSpinner.value = !controller.showSpinner.value;
-    }
   }
 }
